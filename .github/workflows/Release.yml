@@ -1,5 +1,6 @@
 name: Release
-on: push
+on: 
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -40,7 +41,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # the action automatically replaces __VERSION__ with the app version
-          tagName: ${{ env.GITHUB_SHA }}
-          releaseName: ${{ env.GITHUB_SHA }}
-          releaseDraft: true
+          tagName: v__VERSION__
+          releaseName: 'v__VERSION__'
+          releaseDraft: false
           prerelease: false
