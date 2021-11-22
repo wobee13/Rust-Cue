@@ -1,0 +1,51 @@
+name: CI
+on: push
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Node.js setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Rust setup
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install webkit2gtk (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webkit2gtk-4.0
+                
+      - name: Install app dependencies
+        run: yarn && yarn add -D next && yarn build
+
+      - uses: tauri-apps/tauri-action@v0
+        name: Build App
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/upload-artifact@v2
+        name: Upload Bundles
+        with:
+          path: |
+              /Users/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/macos/*.app
+              /Users/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/dmg/*.dmg
+              /home/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/deb/rust-cue_0.1.0_amd64.deb
+              /home/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/appimage/rust-cue_0.1.0_amd64.AppImage
+              D:\a\Rust-Cue\Rust-Cue\src-tauri\target\release\bundle/msi/Rust-Cue_0.1.0_x64.msi
+                
