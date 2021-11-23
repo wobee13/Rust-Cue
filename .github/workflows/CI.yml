@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
+          cache: 'yarn'
 
       - name: Rust setup
         uses: actions-rs/toolchain@v1
@@ -32,7 +33,7 @@ jobs:
           sudo apt-get install -y webkit2gtk-4.0
                 
       - name: Install app dependencies
-        run: yarn && yarn add -D next && yarn build
+        run: yarn && yarn build
 
       - uses: tauri-apps/tauri-action@v0
         name: Build App
@@ -40,12 +41,37 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v2
-        name: Upload Bundles
+        name: Upload MacOS app
+        if: matrix.platform == 'macos-latest'
         with:
-          path: |
-              /Users/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/macos/*.app
-              /Users/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/dmg/*.dmg
-              /home/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/deb/rust-cue_0.1.0_amd64.deb
-              /home/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/appimage/rust-cue_0.1.0_amd64.AppImage
-              D:\a\Rust-Cue\Rust-Cue\src-tauri\target\release\bundle/msi/Rust-Cue_0.1.0_x64.msi
+          name: MacOS-APP
+          path: /Users/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/macos/*.app
+
+      - uses: actions/upload-artifact@v2
+        name: Upload MacOS dmg
+        if: matrix.platform == 'macos-latest'
+        with:
+          name: MacOS-DMG
+          path: /Users/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/dmg/*.dmg
+
+      - uses: actions/upload-artifact@v2
+        name: Upload Linux deb
+        if: matrix.platform == 'ubuntu-latest'
+        with:
+          name: Linux-DEB
+          path: /home/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/deb/*.deb
+              
+      - uses: actions/upload-artifact@v2
+        name: Upload Linux AppImage
+        if: matrix.platform == 'ubuntu-latest'
+        with:
+          name: Linux-AppImage
+          path: /home/runner/work/Rust-Cue/Rust-Cue/src-tauri/target/release/bundle/appimage/*.AppImage
+
+      - uses: actions/upload-artifact@v2
+        name: Upload Windows msi
+        if: matrix.platform == 'windows-latest'
+        with:
+          name: Windows-MSI
+          path: D:\a\Rust-Cue\Rust-Cue\src-tauri\target\release\bundle/msi/*.msi
                 
