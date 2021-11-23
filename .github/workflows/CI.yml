@@ -5,7 +5,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  release:
+  Build:
     strategy:
       fail-fast: false
       matrix:
