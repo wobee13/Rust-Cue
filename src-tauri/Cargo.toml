@@ -21,8 +21,7 @@ tauri = { version = "1.0.0-beta.8", features = ["api-all"] }
 
 # Audio and OSC libraries
 rosc = "0.6.0"
-soloud = "1.0.0"
-# rodio = "0.14.0"
+rodio = "0.14.0"
 
 [features]
 default = ["custom-protocol"]
