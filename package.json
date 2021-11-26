@@ -1,12 +1,15 @@
 {
-  "name": "Rust-Cue",
+  "name": "rust-cue",
   "version": "0.0.0",
   "license": "ISC",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "start": "tauri dev",
+    "release": "tauri build",
+    "update": "tauri deps update"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.7.2",
@@ -15,7 +18,8 @@
     "@tauri-apps/api": "^1.0.0-beta.8",
     "framer-motion": "^4",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "wouter": "^2.8.0-alpha.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-beta.10",
